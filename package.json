@@ -5,16 +5,16 @@
   "license": "MIT",
   "type": "module",
   "scripts": {
-    "build": "cross-env NODE_OPTIONS=--no-deprecation next build",
+    "migrate:create": "pnpm payload migrate:create",
+    "migrate": "pnpm payload migrate",
+    "build": "cross-env NODE_OPTIONS=--no-deprecation next build && pnpm migrate:create && pnpm migrate",
     "dev": "cross-env NODE_OPTIONS=--no-deprecation next dev",
     "devsafe": "rm -rf .next && cross-env NODE_OPTIONS=--no-deprecation next dev",
     "generate:importmap": "cross-env NODE_OPTIONS=--no-deprecation payload generate:importmap",
     "generate:types": "cross-env NODE_OPTIONS=--no-deprecation payload generate:types",
     "lint": "cross-env NODE_OPTIONS=--no-deprecation next lint",
     "payload": "cross-env NODE_OPTIONS=--no-deprecation payload",
-    "migrate:create": "pnpm payload migrate:create",
-    "migrate": "pnpm payload migrate",
-    "start": "cross-env NODE_OPTIONS=--no-deprecation pnpm migrate:create && pnpm migrate && next start"
+    "start": "cross-env NODE_OPTIONS=--no-deprecation next start"
   },
   "dependencies": {
     "@payloadcms/next": "latest",
