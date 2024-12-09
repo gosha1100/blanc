@@ -10,6 +10,7 @@ WORKDIR /app
 
 # Install dependencies based on the preferred package manager
 COPY package.json pnpm-lock.yaml* ./
+# Ensure pnpm is available and used for installing dependencies
 RUN corepack enable pnpm && \
   if [ -f pnpm-lock.yaml ]; then pnpm i --frozen-lockfile; \
   else echo "Lockfile not found." && exit 1; \
@@ -21,7 +22,7 @@ WORKDIR /app
 COPY --from=deps /app/node_modules ./node_modules
 COPY . .
 
-# Disable Next.js telemetry if preferred
+# Uncomment to disable Next.js telemetry during the build
 # ENV NEXT_TELEMETRY_DISABLED 1
 
 RUN corepack enable pnpm && \
@@ -34,7 +35,7 @@ FROM base AS runner
 WORKDIR /app
 
 ENV NODE_ENV production
-# Optionally disable telemetry during runtime
+# Uncomment to disable telemetry during runtime
 # ENV NEXT_TELEMETRY_DISABLED 1
 
 RUN addgroup --system --gid 1001 nodejs
@@ -46,7 +47,7 @@ COPY --from=builder /app/public ./public
 RUN mkdir .next
 RUN chown nextjs:nodejs .next
 
-# Leverage output traces to reduce image size
+# Automatically leverage output traces to reduce image size
 COPY --from=builder --chown=nextjs:nodejs /app/.next/standalone ./
 COPY --from=builder --chown=nextjs:nodejs /app/.next/static ./.next/static
 
@@ -55,5 +56,5 @@ USER nextjs
 EXPOSE 3000
 ENV PORT 3000
 
-# Run migrations and then start the server
-CMD ["sh", "-c", "pnpm run payload migrate:create && pnpm run payload migrate && node server.js"]
+# server.js is created by next build from the standalone output
+CMD ["sh", "-c", "pnpm run payload migrate:create && pnpm run payload migrate && HOSTNAME='0.0.0.0' node server.js"]
