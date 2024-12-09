@@ -14,7 +14,8 @@
     "lint": "cross-env NODE_OPTIONS=--no-deprecation next lint",
     "migrate:create": "pnpm payload migrate:create",
     "migrate": "pnpm payload migrate",
-    "start": "cross-env NODE_OPTIONS=--no-deprecation next start"
+    "start": "cross-env NODE_OPTIONS=--no-deprecation next start",
+    "ci": "payload migrate:create && payload migrate && pnpm build"
   },
   "dependencies": {
     "@payloadcms/next": "latest",
