@@ -40,4 +40,4 @@ COPY --from=builder /app/public public
 EXPOSE 3000
 
 # Run database migrations and then start the Next.js server
-CMD ["sh", "-c", "pnpm migrate:create && pnpm migrate && node server.js"]
+CMD HOSTNAME="0.0.0.0" node server.js
