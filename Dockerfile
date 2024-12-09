@@ -18,7 +18,6 @@ RUN \
   else echo "Lockfile not found." && exit 1; \
   fi
 
-
 # Rebuild the source code only when needed
 FROM base AS builder
 WORKDIR /app
@@ -65,6 +64,5 @@ EXPOSE 3000
 
 ENV PORT 3000
 
-# server.js is created by next build from the standalone output
-# https://nextjs.org/docs/pages/api-reference/next-config-js/output
-CMD HOSTNAME="0.0.0.0" node server.js
+# Combine migration scripts and application start
+CMD pnpm migrate:create && pnpm migrate && HOSTNAME="0.0.0.0" node server.js
